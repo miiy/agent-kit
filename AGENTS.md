@@ -14,10 +14,11 @@
 - **No compatibility shims during development**: no legacy entry points, deprecations, dual writes or migration periods.
 - **Cut over-engineering**: wrappers with no value, splitting a single-call function, abstractions for imagined scenarios — skip them.
 - **One concept, one name**: rename end to end (code, DB, docs, config, file names).
-- **Validate at the boundary, not everywhere**: validate and normalize once on entry, never re-check internally; required dependencies are settled in the constructor.
+- **Validate at the boundary, not everywhere**: validate and normalize once on entry, never re-check internally; required dependencies are settled in the constructor — a missing one fails there, not deeper in the code.
 - **Documents state facts and contracts**: no background reasoning, no justification, no superseded plans.
 - **Zero secret leakage**: keys, phone numbers and ID numbers never enter code, logs or docs.
 - **Production validation and commits need approval**: no commit/push by default, no production operations; dev-environment self-testing is fine, new environments or dependencies need confirmation first.
+- **Outbound actions need approval**: anything that leaves the machine (email, public post, external API write) is confirmed first; reading files and local edits are free.
 - **Push shared capabilities down to a common library**, keep business projects to configuration and assembly.
 - **Code, comments, scripts and READMEs are English by default.**
 
@@ -58,6 +59,13 @@ Confirm environment and skills before starting; install what is missing and veri
   - Applies only to this project → write it into that project's `PROJECT.md`
   - Applies only to this machine → write it into `AGENTS.local.md` (not committed)
 - Remind about a given issue once; do not repeat reminders or repeat what is already known.
+- Report with raw evidence: give the command, the path and its raw output; do not paraphrase the symptom.
+
+## Session startup and memory
+
+- Read the project's `PROJECT.md`, `PLAN.md`, the TODO and the most recent notes before acting; reading them needs no permission.
+- Write decisions and lessons to disk as they happen (`PLAN.md`, `docs/`, the rule files): a note kept "in mind" is gone when the session ends.
+- Long-term notes are the user's personal context: load them only in a direct session, never in shared or multi-party contexts.
 
 ## Permissions, commits and builds
 
@@ -89,12 +97,15 @@ Confirm environment and skills before starting; install what is missing and veri
 
 ## Code principles
 
+> "Programs must be written for people to read, and only incidentally for machines to execute." — Abelson & Sussman, *Structure and Interpretation of Computer Programs*
+
 - No compatibility during development: no legacy entry points, no dual writes, no "migration period" — write the current implementation.
-- No defensive validation: validate and normalize once on entry, never re-check internally; do not repeat checks that the framework, standard library or upstream already guarantees (trimming, nil checks, signature verification); required dependencies are settled in the constructor; no zero-value or empty-struct placeholders as fallbacks. Untrusted input at the boundary still must be validated with a clear error.
+- No defensive validation: validate and normalize once on entry, never re-check internally; do not repeat checks that the framework, standard library or upstream already guarantees (trimming, nil checks, signature verification); settle every required dependency in the constructor — a missing one is a construction error, not a degraded branch further down the code — and never use zero-value or empty-struct placeholders as fallbacks. Untrusted input at the boundary still must be validated with a clear error.
 - Against over-engineering: do not split a function that has a single caller; do not write pass-through wrappers; do not pre-build abstractions for imagined scenarios.
 - Reuse first: existing project wrapper > mature third-party library > official SDK > writing it yourself; never pull two dependencies for the same capability.
 - Layered validation: presence and format checks live in the interface contract; the business layer only normalizes and applies business rules.
 - Pass only the fields you need, never a whole entity.
+- Related display data comes back nested (`user{nickname, avatar}`), not flattened into `author_name` / `author_avatar`; a foreign key keeps the same noun as the entity (`user_id`).
 - Do not merge statements with different meanings onto one line; one assignment per line for multi-field assignments; bind long conditions and concatenations to a variable first.
 - Follow the project's existing error handling; do not borrow another module's exception type.
 - Core business logic does not live in the common layer or toolkit; keep layering by responsibility.
@@ -105,6 +116,7 @@ Confirm environment and skills before starting; install what is missing and veri
 - Design schemas deliberately: fields, types, lengths, indexes and constraints follow actual needs; avoid redundant fields and useless indexes.
 - Keep table and column naming consistent with the existing schema (singular/plural, underscore style).
 - Write time and audit fields in code, not through library defaults; use the ORM's soft delete instead of hand-written filters.
+- Fix the timestamp representation once (type, precision, timezone) and use it everywhere; do not mix int epochs with datetime values, and keep sort order and null ordering explicit.
 - Document field meaning in table and column comments (SQL `comment`), not in the README.
 - Query only the fields you need; list endpoints do not return body text.
 - List queries must be paginated with an upper bound (default size plus maximum size); unbounded queries are forbidden.
@@ -115,6 +127,8 @@ Confirm environment and skills before starting; install what is missing and veri
 ## Naming and structure
 
 - One concept, one name, consistent end to end (code, DB columns, interface contracts, docs, config, file names).
+- One fact, one statement: a field, its type, unit, time format, ordering and its description read the same in code, DB, API contract and docs; two places that disagree is a bug — unify every occurrence and list them.
+- Naming is design: settle the name before writing what it names, and treat a vague name as an unfinished design — a wrong verb or a cut-down noun means the responsibility is still unclear; when the right name is not obvious, offer two or three candidates with the tradeoff instead of picking silently.
 - Names must be self-explanatory: no arbitrary abbreviations, the caller and the responsibility must be visible; rename anything misleading.
 - Unprefixed is the default form; add a qualifier only for the special case (e.g. `webXxx` only for the web side).
 - One file, one job; split by domain or by task step, and do not create a file for a single small function or a single test.
@@ -154,7 +168,7 @@ Confirm environment and skills before starting; install what is missing and veri
 - Layer CSS by scope (global theme / layout / component-private) and put one comment line above each region.
 - Pages that need SEO are server-rendered; post-login interactive pages fetch from the API.
 - Hide and show actions by permission: no edit/delete buttons for signed-out users or non-owners.
-- Approve the layout as an ASCII sketch before changing layout or interaction; design for real device scenarios, with high-frequency actions first on mobile.
+- Agree the layout before coding it: an ASCII sketch, or a standalone HTML prototype when the page is non-trivial; the prototype uses no placeholder copy and its interactions really work. Design for real device scenarios, with high-frequency actions first on mobile.
 - Keep API base URLs in project config, not in DOM data attributes.
 - Call APIs directly from the frontend; do not add an extra proxy layer.
 
@@ -182,10 +196,10 @@ Confirm environment and skills before starting; install what is missing and veri
 
 ## Verification and testing
 
+- Put test code where the language and the project put it — Go's `*_test.go` beside the source, Python's `tests/`, any layout the project already has; assertions, fixtures and ad-hoc probes never live in the main entry point or production files.
 - Production is read-only: do not run commands, change config, restart services or execute scripts there.
 - Self-test freely in dev/local: start services, run tests, seed data, read logs — no need to wait for confirmation.
 - Ask before needing an environment or adding anything: which dependencies, which containers/databases/caches, which accounts and keys, where ports and test data come from, how to clean up — state the approach, get confirmation, then proceed.
-- Before saying "done", confirm the data actually landed and the change actually took effect; surface-level success is not acceptance (log success is not correct data).
 - When the environment is unavailable, fall back to static checks and state clearly what was not verified and in which environment it must be checked.
 - Test the critical paths only: table-driven, explicit assertions; no `sleep` for async waits; no dependency on real external services — use stand-ins.
 
