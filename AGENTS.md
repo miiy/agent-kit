@@ -28,6 +28,7 @@
 Confirm environment and skills before starting; install what is missing and verify with `skills list`.
 
 - Prerequisites: `git`, `make`, `node`/`npx`. When installing anything, state what and why before acting.
+- Restricted network (dependency installs or external calls failing): try the proxy `127.0.0.1:7890` first — usually `export http_proxy=http://127.0.0.1:7890 https_proxy=http://127.0.0.1:7890` is enough; if that still fails, ask the user whether a proxy exists.
 - Skills are managed with the `skills` CLI: list `skills add <owner/repo> -l`, install `skills add <owner/repo>@<skill> -g -y`, list installed `skills list`, update `skills update`.
 - Scope: install globally (`-g`) for cross-project use; install project-level when only the current project needs it, and commit `skills-lock.json`.
 - Bootstrap set:
@@ -69,6 +70,7 @@ Confirm environment and skills before starting; install what is missing and veri
 - Deployment, UI configuration and production verification belong to the user.
 - One commit does one thing; do not mix unrelated changes.
 - Commit messages follow Conventional Commits: `<type>(<scope>): <subject>`, one-line subject; type is one of `feat` / `fix` / `docs` / `style` / `refactor` / `perf` / `test` / `build` / `ci` / `chore` / `revert`; the body states the motivation and how it was verified.
+- Commit messages are written in English: subject and body both, Chinese stays in conversation and documents.
 - Show the commit message before committing: propose the subject (and body when needed) and wait for approval.
 - Branch naming and commit conventions follow the `conventional-branch` skill (Conventional Branch + Conventional Commits); see https://skills.sh/conventional-branch/conventional-branch/conventional-branch and defer to it when it changes.
 - `main` carries no prefix and is always runnable; branch off it for features and fixes, one branch for one task, delete the branch after merging.

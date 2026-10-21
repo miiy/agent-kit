@@ -28,6 +28,7 @@
 开工前先确认环境与技能就位；缺什么装什么，装完用 `skills list` 验证。
 
 - 前置工具：`git`、`make`、`node`/`npx`。装任何东西前，先说清装什么、为什么。
+- 网络受限时（拉依赖、访问外网失败）先试代理 `127.0.0.1:7890`：多数情况 `export http_proxy=http://127.0.0.1:7890 https_proxy=http://127.0.0.1:7890` 就能用；还不通就问用户有没有可用代理。
 - 技能统一用 `skills` CLI 管理：看清单 `skills add <owner/repo> -l`，安装 `skills add <owner/repo>@<skill> -g -y`，列已装 `skills list`，更新 `skills update`。
 - 作用域：跨项目要用的装全局（`-g`）；只服务当前项目的装项目级，并提交 `skills-lock.json`。
 - 初始化必装：
@@ -69,6 +70,7 @@
 - 部署、界面配置、生产环境验证由用户完成。
 - 一次提交只做一件事，不把无关改动混在一起。
 - 提交信息用 Conventional Commits：`<type>(<scope>): <subject>`，标题一行；type 取 `feat`（新功能）/ `fix`（修 bug）/ `docs`（文档）/ `style`（格式）/ `refactor`（重构）/ `perf`（性能）/ `test`（测试）/ `build`（构建依赖）/ `ci`（流水线）/ `chore`（杂项）/ `revert`（回滚）；正文写清动机与验证方式。
+- 提交信息用英文：标题与正文都写英文，中文只留在对话和文档里。
 - commit 信息先提交确认：把拟好的标题（必要时带正文）给出，确认后再执行 commit。
 - 分支命名与提交规范按 `conventional-branch` 技能执行（Conventional Branch + Conventional Commits），细节查 https://skills.sh/conventional-branch/conventional-branch/conventional-branch ；该技能更新后以其为准。
 - 主干（`main`）不加前缀、随时可运行；功能与修复从主干拉短分支，一个分支只做一件事，合并后删除。
