@@ -2,28 +2,15 @@
 
 All notable changes to this project are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follow [SemVer](https://semver.org/).
+Still in development: everything sits under Unreleased until the first `vX.Y.Z` tag.
 
 ## [Unreleased]
 
 ### Added
 
-- Templates are English-only (`templates/PROJECT.md`, `templates/PLAN.md`).
-- Two rules files: `AGENTS.md` (English, default) and `AGENTS.zh-CN.md` (Simplified Chinese), kept in sync.
-- `install.sh --lang en|zh-CN`: picks the symlink target; without the flag it reads `LC_ALL`/`LANG`.
-- `install.sh`: installs this repo into a project as a git submodule (`.agent-kit`), links `AGENTS.md` to it, creates `PROJECT.md` from the template, and ignores `*.local.md`. Supports `--link` (local symlink install), `--url`, `--dry-run`, `--force`.
-- `templates/PROJECT.md`: project-specific rules skeleton, replacing `templates/project-AGENTS.md`.
-- `templates/PLAN.md`: single plan file for larger changes (draft, confirm, tick off item by item, delete when done).
-- `AGENTS.md`: section on environment prerequisites and bootstrap skills.
-- `AGENTS.md`: rule routing for repeated mistakes — universal rules here, project rules in `PROJECT.md`, machine-local notes in `AGENTS.local.md`.
-
-### Changed
-
-- Rules ship per project as a clone instead of a global file: each project keeps its own copy under `.agent-kit` (git-ignored) and updates with `make pull`.
-- Dropped the global sync script and its targets; `install.sh` is the only entry point.
-- `AGENTS.md`: project content now goes to `PROJECT.md` (the project's `AGENTS.md` is a symlink to the rules source).
-
-## [1.0.0] - 2026-10-21
-
-### Added
-
-- Single-source `AGENTS.md` covering workflow, permissions, commits and branches, design principles, code, database, naming, comments, docs, frontend, security, observability, verification, language.
+- `AGENTS.md` (English, default) and `AGENTS.zh-CN.md` (Simplified Chinese): one ruleset in two languages, sections kept in sync — core points, environment and skills, workflow, session startup and memory, permissions and commits, design principles, code principles, database, naming and structure, comments and formatting, documents, frontend, data and config and security, logging and observability, verification and testing, language and expression, pre-commit checklist.
+- Rule routing: universal rules in `AGENTS.md`, project rules in the project's `PROJECT.md`, machine-local notes in `AGENTS.local.md`.
+- `install.sh`: clones this repo into a project as `.agent-kit` and links `AGENTS.md` to the rules file matching the language, so Codex, Claude Code and DeepSeek Harness load the same rules. `--link` symlinks this checkout instead of cloning, `--submodule` installs as a submodule, plus `--url`, `--lang en|zh-CN`, `--dry-run` and `--force`. Creates `PROJECT.md` from the template and adds `.agent-kit/` and `*.local.md` to the project's `.gitignore`.
+- `templates/PROJECT.md`: skeleton for project-specific rules.
+- `templates/PLAN.md`: single plan file for larger changes (draft, confirm, tick off item by item, fold into docs and delete).
+- `Makefile`: single entry point — `install`, `install-local`, `install-submodule`, `install-dry`, `pull`, `tag`, `clean`.
