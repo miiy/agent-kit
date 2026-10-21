@@ -150,7 +150,7 @@ Confirm environment and skills before starting; install what is missing and veri
 ## Documents
 
 - Write the README to open-source standards: features / quick start / installation / layout, and keep it short.
-- Public docs are bilingual: English is the default (`README.md`), Chinese lives in `README.zh-CN.md`; both carry the switcher line `[English](README.md) | 简体中文` at the top and stay in sync.
+- Public docs are bilingual: English is the default (`README.md`), Chinese lives in `README.zh-CN.md`; both carry the switcher line `[English](README.md) | [简体中文](README.zh-CN.md)` at the top and stay in sync.
 - The overview goes in the README; MVP and core constraints go in the design doc.
 - A design doc records only contracts and data flow (when created/updated/deleted, where it lives); implementation detail stays out.
 - Documents state facts and the current decision only: no background reasoning, no justification, no superseded plans.

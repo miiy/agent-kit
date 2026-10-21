@@ -1,6 +1,6 @@
 # agent-kit
 
-`[English](README.md) | 简体中文`
+[English](README.md) | [简体中文](README.zh-CN.md)
 
 通用工程规范工具包：一份 `AGENTS.md`，克隆进项目里使用，Codex / Claude Code / DeepSeek Harness 都能读。
 
@@ -13,10 +13,10 @@
 ## 快速开始
 
 ```bash
-git clone <this-repo> agent-kit && cd agent-kit
+git clone https://github.com/miiy/agent-kit.git agent-kit && cd agent-kit
 
-make install DIR=/path/to/project              # 克隆进项目的 .agent-kit
-make install DIR=/path/to/project URL=git@github.com:<you>/agent-kit.git
+make install DIR=/path/to/project              # 克隆进项目的 .agent-kit，地址取自 origin
+make install DIR=/path/to/project URL=https://github.com/miiy/agent-kit.git   # 显式指定地址
 make install DIR=/path/to/project LANG=zh-CN   # 中文规则（默认英文）
 make install-dry DIR=/path/to/project          # 只预览
 make install-local DIR=/path/to/project        # 软链本机 checkout，不克隆
@@ -25,7 +25,7 @@ make install-local DIR=/path/to/project        # 软链本机 checkout，不克�
 安装后项目里多出：
 
 ```
-<project>/
+my-project/
 ├── .agent-kit/     （不入库）
 ├── AGENTS.md       （软链）
 ├── PROJECT.md
@@ -42,7 +42,7 @@ git commit -m "feat: add agent-kit rules"
 ## 更新规则
 
 ```bash
-make pull DIR=/path/to/project     # 等价于 git -C <project>/.agent-kit pull
+make pull DIR=/path/to/project     # 等价于 git -C /path/to/project/.agent-kit pull
 ```
 
 ## 规则语言

@@ -1,6 +1,6 @@
 # agent-kit
 
-`[English](README.md) | 简体中文`
+[English](README.md) | [简体中文](README.zh-CN.md)
 
 General-purpose engineering rules as a toolkit: one `AGENTS.md`, cloned into a project and read by Codex, Claude Code and DeepSeek Harness.
 
@@ -13,10 +13,10 @@ General-purpose engineering rules as a toolkit: one `AGENTS.md`, cloned into a p
 ## Quick start
 
 ```bash
-git clone <this-repo> agent-kit && cd agent-kit
+git clone https://github.com/miiy/agent-kit.git agent-kit && cd agent-kit
 
-make install DIR=/path/to/project              # clone into the project's .agent-kit
-make install DIR=/path/to/project URL=git@github.com:<you>/agent-kit.git
+make install DIR=/path/to/project              # clone into the project's .agent-kit, url from origin
+make install DIR=/path/to/project URL=https://github.com/miiy/agent-kit.git   # explicit url
 make install DIR=/path/to/project LANG=zh-CN   # Chinese rules (English by default)
 make install-dry DIR=/path/to/project          # preview only
 make install-local DIR=/path/to/project        # symlink to this checkout, no clone
@@ -25,7 +25,7 @@ make install-local DIR=/path/to/project        # symlink to this checkout, no cl
 After install the project contains:
 
 ```
-<project>/
+my-project/
 ├── .agent-kit/     (not committed)
 ├── AGENTS.md       (symlink)
 ├── PROJECT.md
@@ -42,7 +42,7 @@ git commit -m "feat: add agent-kit rules"
 ## Updating the rules
 
 ```bash
-make pull DIR=/path/to/project     # same as git -C <project>/.agent-kit pull
+make pull DIR=/path/to/project     # same as git -C /path/to/project/.agent-kit pull
 ```
 
 ## Rules language
