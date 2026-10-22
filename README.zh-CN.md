@@ -70,7 +70,7 @@ README.md / README.zh-CN.md / LICENSE / CHANGELOG.md / Makefile
 
 1. 通用规则改 `AGENTS.md`，两份语言同步改；项目特有的写该项目的 `PROJECT.md`，不进这里。
 2. 一条一个 `- `：写清做什么以及边界，不写理由、不写历史。
-3. 一次 PR 只做一类改动，标题用 Conventional Commits，例如 `docs(rules): 分支规则改为引用 conventional-branch`。
+3. PR 标题用 Conventional Commits，例如 `docs(rules): 分支规则改为引用 conventional-branch`。
 4. 分支用 `chore/<描述>` 或 `docs/<描述>`；改动影响安装行为的，同步更新 `README` 与 `CHANGELOG`。
 
 **注意**：项目里的 `AGENTS.md` 是软链，编辑它会改到 `.agent-kit` 里的规则源。项目内容一律写 `PROJECT.md`。

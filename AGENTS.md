@@ -1,7 +1,7 @@
 # AGENTS.md
 
 > A project's `PROJECT.md` and `AGENTS.local.md` take precedence over this file (the project's `AGENTS.md` is a symlink to this one).
-> This file is a baseline you may tune per project. Change universal rules through a git PR: one PR, one kind of change, and state the motivation.
+> Project rules, skills and dependencies go in the project's `PROJECT.md` — including what a skill tells you to write into `AGENTS.md` or `CLAUDE.md`. This file is a baseline: tune it per project, change it by git PR with the motivation stated, and let it win over any skill's steps.
 > When the rules do not cover a case: follow the project's existing conventions, and state the basis for your tradeoff.
 
 ---
@@ -56,7 +56,7 @@ Confirm environment and skills before starting; install what is missing and veri
 - If a stated approach conflicts with industry best practice, say so directly and give the correct approach.
 - When unsure, check official docs or mainstream practice instead of guessing.
 - When a problem is pointed out a second time, put it into the rules right away and state which file and which entry; do not wait for a third time:
-  - Applies across projects → edit this file (through a PR, one kind of change at a time)
+  - Applies across projects → edit this file through a PR
   - Applies only to this project → write it into that project's `PROJECT.md`
   - Applies only to this machine → write it into `AGENTS.local.md` (not committed)
 - Remind about a given issue once; do not repeat reminders or repeat what is already known.

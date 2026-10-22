@@ -70,7 +70,7 @@ README.md / README.zh-CN.md / LICENSE / CHANGELOG.md / Makefile
 
 1. Universal rules go to `AGENTS.md`, both language files together; project-only rules go to that project's `PROJECT.md`, not here.
 2. One bullet per rule: what to do plus its boundary. No rationale, no history.
-3. One PR, one kind of change, titled per Conventional Commits, e.g. `docs(rules): reference the conventional-branch skill for branch naming`.
+3. Title the PR per Conventional Commits, e.g. `docs(rules): reference the conventional-branch skill for branch naming`.
 4. Branch as `chore/<description>` or `docs/<description>`; when the change affects installation, update `README` and `CHANGELOG` too.
 
 **Note**: the project's `AGENTS.md` is a symlink into `.agent-kit`; editing it changes the shared rules. Put project content in `PROJECT.md`.
