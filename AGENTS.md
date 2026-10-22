@@ -30,13 +30,14 @@ Confirm environment and skills before starting; install what is missing and veri
 
 - Prerequisites: `git`, `make`, `node`/`npx`. When installing anything, state what and why before acting.
 - Restricted network (dependency installs or external calls failing): try the proxy `127.0.0.1:7890` first — usually `export http_proxy=http://127.0.0.1:7890 https_proxy=http://127.0.0.1:7890` is enough; if that still fails, ask the user whether a proxy exists.
-- Skills are managed with the `skills` CLI: list `skills add <owner/repo> -l`, install `skills add <owner/repo>@<skill> -g -y`, list installed `skills list`, update `skills update`.
-- Scope: install globally (`-g`) for cross-project use; install project-level when only the current project needs it, and commit `skills-lock.json`.
+- Skills are managed with the `skills` CLI: list `skills add <owner/repo> -l`, install `skills add <owner/repo>@<skill> -y` (project-level by default), list installed `skills list`, update `skills update`.
+- Scope: project-level is the default — the skill lives with the project and `skills-lock.json` is committed; add `-g` only for a skill several projects need.
 - Bootstrap set:
   - `agent-browser` — browser automation: scrape pages, click through forms, take screenshots, fill forms
   - `find-skills` — search for and install other skills
   - `skill-creator` — create or rework skills
   - `conventional-branch/conventional-branch@conventional-branch` — branch naming and commit conventions; docs https://skills.sh/conventional-branch/conventional-branch/conventional-branch , spec https://conventionalbranch.org
+  - `mattpocock/skills` — engineering and productivity skills pack: `to-spec`/`to-tickets` split work, `triage`, `tdd`, `implement`, `code-review` and more; tell the user to run `npx skills add mattpocock/skills` inside the project themselves (project-level, no `-g`; interactive selector, never run it for them); full list: https://github.com/mattpocock/skills#reference
 - Install on demand: `docx`, `xlsx`, `pptx`, `pdf` for Office/PDF output.
 - Project-specific skills and environment dependencies belong in the project's `PROJECT.md`, never in this universal file.
 
@@ -77,7 +78,7 @@ Confirm environment and skills before starting; install what is missing and veri
 - Never hand-edit generated artefacts; change the generator or its config, at most run a formatter.
 - Deployment, UI configuration and production verification belong to the user.
 - One commit does one thing; do not mix unrelated changes.
-- Commit messages follow Conventional Commits: `<type>(<scope>): <subject>`, one-line subject; type is one of `feat` / `fix` / `docs` / `style` / `refactor` / `perf` / `test` / `build` / `ci` / `chore` / `revert`; the body states the motivation and how it was verified.
+- Commit messages follow Conventional Commits: `<type>(<scope>): <subject>`, one-line subject; type is one of `feat` / `fix` / `docs` / `style` / `refactor` / `perf` / `test` / `build` / `ci` / `chore` / `revert`; the body states the key points briefly — why the change and how it was verified, not a walk-through of the diff.
 - Commit messages are written in English: subject and body both, Chinese stays in conversation and documents.
 - Show the commit message before committing: propose the subject (and body when needed) and wait for approval.
 - Branch naming and commit conventions follow the `conventional-branch` skill (Conventional Branch + Conventional Commits); see https://skills.sh/conventional-branch/conventional-branch/conventional-branch and defer to it when it changes.
