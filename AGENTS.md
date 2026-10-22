@@ -17,8 +17,8 @@
 - **Validate at the boundary, not everywhere**: validate and normalize once on entry, never re-check internally; required dependencies are settled in the constructor — a missing one fails there, not deeper in the code.
 - **Documents state facts and contracts**: no background reasoning, no justification, no superseded plans.
 - **Zero secret leakage**: keys, phone numbers and ID numbers never enter code, logs or docs.
-- **Production validation and commits need approval**: no commit/push by default, no production operations; dev-environment self-testing is fine, new environments or dependencies need confirmation first.
-- **Outbound actions need approval**: anything that leaves the machine (email, public post, external API write) is confirmed first; reading files and local edits are free.
+- **Production and pushes need approval**: no pushes and no production operations by default; dev-environment self-testing is fine, new environments or dependencies need confirmation first.
+- **Outbound actions need approval**: anything that leaves the machine (email, public post, external API write) is confirmed first.
 - **Push shared capabilities down to a common library**, keep business projects to configuration and assembly.
 - **Code, comments, scripts and READMEs are English by default.**
 
@@ -64,28 +64,25 @@ Confirm environment and skills before starting; install what is missing and veri
 
 ## Session startup and memory
 
-- Read the project's `PROJECT.md`, `PLAN.md`, the TODO and the most recent notes before acting; reading them needs no permission.
+- Read the project's `PROJECT.md`, `PLAN.md`, the TODO and the most recent notes before acting.
 - Write decisions and lessons to disk as they happen (`PLAN.md`, `docs/`, the rule files): a note kept "in mind" is gone when the session ends.
 - Long-term notes are the user's personal context: load them only in a direct session, never in shared or multi-party contexts.
 
 ## Permissions, commits and builds
 
-- **No commits by default**: without an explicit "commit" or "push", do not run `git commit` / `git push`.
-- "Check it and commit if fine" is the authorization: self-check → confirm scope with `git status` → one-line commit message.
-- Commit only the named files; never `git add` files not yet reviewed.
-- Perform no operations in production (commands, config edits, service restarts, scripts). Installing tools and requesting permissions belong to the user.
-- Ask before dangerous commands (`rm -rf`, `git reset --hard`, `drop table`, overwriting production config).
-- Never hand-edit generated artefacts; change the generator or its config, at most run a formatter.
-- Deployment, UI configuration and production verification belong to the user.
-- One commit does one thing; do not mix unrelated changes.
-- Commit messages follow Conventional Commits: `<type>(<scope>): <subject>`, one-line subject; type is one of `feat` / `fix` / `docs` / `style` / `refactor` / `perf` / `test` / `build` / `ci` / `chore` / `revert`; the body states the key points briefly — why the change and how it was verified, not a walk-through of the diff.
-- Commit messages are written in English: subject and body both, Chinese stays in conversation and documents.
-- Show the commit message before committing: propose the subject (and body when needed) and wait for approval.
+- When committing, one commit is one logical change: it reverts on its own, builds and tests pass at that commit, and its subject needs no "and". Split by intent, not by file or by session.
+- Messages follow Conventional Commits: `<type>(<scope>): <subject>`, one-line subject; type is one of `feat` / `fix` / `docs` / `style` / `refactor` / `perf` / `test` / `build` / `ci` / `chore` / `revert`; the body states the key points briefly — why the change and how it was verified, not a walk-through of the diff.
+- Messages are written in English, subject and body; Chinese stays in conversation and documents.
+- **Pushes need approval**: push, PR and any rewrite of pushed history wait for an explicit go-ahead — per action, or once as a plan that lists them, which then covers that list and the subagents it spawns.
+- **Review and tidy before push**: walk the series with `git log` and `git diff <base>...HEAD`; squash or reword into logical commits, drop what does not belong, and rewrite history only before the push — never after it.
 - Branch naming and commit conventions follow the `conventional-branch` skill (Conventional Branch + Conventional Commits); see https://skills.sh/conventional-branch/conventional-branch/conventional-branch and defer to it when it changes.
-- `main` carries no prefix and is always runnable; branch off it for features and fixes, one branch for one task, delete the branch after merging.
+- `main` carries no prefix and is always runnable; branch off it for features and fixes, one branch for one task, delete it after merging.
 - Rebase onto the latest `main` before merging; keep history linear, do not pile up merge commits.
 - Never force-push shared branches; ask before switching branches, rebasing, resetting or deleting branches.
-- Tag releases (`vX.Y.Z`) and update the CHANGELOG.
+- Tag releases (`vX.Y.Z`) and update the CHANGELOG; the tag needs the go-ahead.
+- No operations in production (commands, config edits, service restarts, scripts); installing tools, requesting permissions, deployment, UI configuration and production verification belong to the user.
+- Ask before dangerous commands (`rm -rf`, `git reset --hard`, `drop table`, overwriting production config).
+- Never hand-edit generated artefacts; change the generator or its config, at most run a formatter.
 - Build, check and test go through one entry point (`make lint` / `make test` / `make build` or equivalents) so local and CI run the same command.
 - Keep out of the repo what does not belong: build output, generated artefacts, local config, database files, logs, keys — exclude them in `.gitignore`.
 
@@ -212,7 +209,7 @@ Confirm environment and skills before starting; install what is missing and veri
 
 ---
 
-## Pre-commit checklist
+## Before reporting
 
 - [ ] Only the named files changed? Any other change reported?
 - [ ] Compiles / type-checks / formatting applied?
@@ -223,4 +220,3 @@ Confirm environment and skills before starting; install what is missing and veri
 - [ ] CHANGELOG / version bumped? (published repos)
 - [ ] No sensitive data in logs?
 - [ ] No generated file hand-edited?
-- [ ] `git status` shows only the planned files; commit subject states in one line what changed?
