@@ -8,15 +8,32 @@
 - Key directories:
 - How to run locally:
 - Ports and addresses:
+- Proxy (if any):
 
 ## Project-specific rules
 
 - e.g. the `auth` module may only be called by `gateway`; no reverse dependency.
 - e.g. writes to the `orders` table must go through `service/order`, never direct SQL.
 
+## Agent skills
+
+> A skill's `AGENTS.md` or `CLAUDE.md` content goes here; never create or edit either file.
+
+### Issue tracker
+
+- Where work is tracked (GitHub issues, GitLab issues, local markdown under `.scratch/`, something else):
+- How to open, label, read and close one:
+
+### Triage labels
+
+- The label strings standing for `needs-triage` / `needs-info` / `ready-for-agent` / `ready-for-human` / `wontfix`:
+
+### Domain docs
+
+- Layout: single-context (`GLOSSARY.md` + `docs/adr/`) or multi-context (`GLOSSARY-MAP.md` pointing at each context):
+
 ## Skills
 
-- Whatever a skill tells you to write into `AGENTS.md` or `CLAUDE.md` goes here instead; never create or edit either file.
 - Skills that do not apply here, and why (wrong stack, no issue tracker, no hook support):
 - Standing git policy, if any (e.g. feature-branch commits pre-authorized, push never):
 

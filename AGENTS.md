@@ -1,6 +1,6 @@
 # AGENTS.md
 
-> A project's `PROJECT.md` and `AGENTS.local.md` take precedence over this file (the project's `AGENTS.md` is a symlink to this one).
+> A project's `PROJECT.md` and its `AGENTS.local.md` (machine-local, not committed) take precedence over this file (the project's `AGENTS.md` is a symlink to this one).
 > Project rules, skills and dependencies go in the project's `PROJECT.md` — including what a skill tells you to write into `AGENTS.md` or `CLAUDE.md`. This file is a baseline: tune it per project, change it by git PR with the motivation stated, and let it win over any skill's steps.
 > When the rules do not cover a case: follow the project's existing conventions, and state the basis for your tradeoff.
 
@@ -11,7 +11,6 @@
 - **Plan before acting**: propose the change list and the tradeoffs, then code once confirmed.
 - **One small step at a time**: implement and review in chunks.
 - **Touch only what was named**: report before changing any other file.
-- **No compatibility shims during development**: no legacy entry points, deprecations, dual writes or migration periods.
 - **Cut over-engineering**: wrappers with no value, splitting a single-call function, abstractions for imagined scenarios — skip them.
 - **One concept, one name**: rename end to end (code, DB, docs, config, file names).
 - **Validate at the boundary, not everywhere**: validate and normalize once on entry, never re-check internally; required dependencies are settled in the constructor — a missing one fails there, not deeper in the code.
@@ -29,8 +28,8 @@
 Confirm environment and skills before starting; install what is missing and verify with `skills list`.
 
 - Prerequisites: `git`, `make`, `node`/`npx`. When installing anything, state what and why before acting.
-- Restricted network (dependency installs or external calls failing): try the proxy `127.0.0.1:7890` first — usually `export http_proxy=http://127.0.0.1:7890 https_proxy=http://127.0.0.1:7890` is enough; if that still fails, ask the user whether a proxy exists.
-- Skills are managed with the `skills` CLI: list `skills add <owner/repo> -l`, install `skills add <owner/repo>@<skill> -y` (project-level by default), list installed `skills list`, update `skills update`.
+- Restricted network (dependency installs or external calls failing): take the address from `AGENTS.local.md` or `PROJECT.md` and apply it the usual way — `export http_proxy=<address> https_proxy=<address>`; with none recorded, try `http://127.0.0.1:7890`; if the install still fails, ask the user for the actual one.
+- Skills are managed with the `skills` CLI: `skills add <owner/repo> -l` lists a repository's skills, `skills add <owner/repo> -s <skill> -y` installs one (project-level by default), `skills list` shows what is installed, `skills update` upgrades.
 - Scope: project-level is the default — the skill lives with the project and `skills-lock.json` is committed; add `-g` only for a skill several projects need.
 - Bootstrap set:
   - `agent-browser` — browser automation: scrape pages, click through forms, take screenshots, fill forms
@@ -47,32 +46,28 @@ Confirm environment and skills before starting; install what is missing and veri
 
 - Read the project's `PROJECT.md` first (if present): it holds project-specific rules and outranks this file.
 - Default flow: plan (files, tradeoffs, blast radius) → confirmation → code in steps → self-check → report which files changed and how to verify; on "stop, don't change it", stop immediately.
-- **Review mode** for "review", "take a look", "audit", "advice only": read-only — list issues by severity as "file:line / problem / suggested fix"; no code, no files written, no commits; change only after an explicit "go ahead".
-- For large changes (more than three files, cross-module, or spanning several sessions) write a single `PLAN.md` and wait for confirmation before coding; template at `templates/PLAN.md`.
-- `PLAN.md` content: goal and scope (do / don't), file-level change list, step plan (each step verifiable), risks and rollback, verification method.
-- Work through `PLAN.md` one item at a time: tick each item and add one line on what changed and how it was verified.
-- When a session ends or context is lost, read `PLAN.md` before continuing; when everything is done, fold the conclusions into `docs/` or CHANGELOG and delete `PLAN.md`.
+- **Review mode** for "review", "take a look", "audit", "advice only": read-only — no code, no files written, no commits; change only after an explicit "go ahead".
+  - A change: `code-review`, from the fixed point the user names (ask when there is none).
+  - An area or the whole repo: list by severity as "file:line / problem / suggested fix".
+- For large changes (more than three files, cross-module, or spanning several sessions) write `PLAN.md` from `templates/PLAN.md` and wait for confirmation; work through it one item at a time, and read it first when a session resumes. It is session scratch, deleted when the work lands.
+- What outlives the session follows `to-spec` / `to-tickets`: a spec and its tickets state behaviour, never file paths or code snippets, and the next ticket is whichever has no blocker left.
 - When you fix one instance of a class of problem, sweep the whole project; do not fix only the spot that was pointed at.
 - If a stated approach conflicts with industry best practice, say so directly and give the correct approach.
 - When unsure, check official docs or mainstream practice instead of guessing.
-- When a problem is pointed out a second time, put it into the rules right away and state which file and which entry; do not wait for a third time:
-  - Applies across projects → edit this file through a PR
-  - Applies only to this project → write it into that project's `PROJECT.md`
-  - Applies only to this machine → write it into `AGENTS.local.md` (not committed)
+- When a problem is pointed out a second time, put it into the rules right away and state which file and which entry; do not wait for a third time.
 - Remind about a given issue once; do not repeat reminders or repeat what is already known.
 - Report with raw evidence: give the command, the path and its raw output; do not paraphrase the symptom.
 
 ## Session startup and memory
 
-- Read the project's `PROJECT.md`, `PLAN.md`, the TODO and the most recent notes before acting.
-- Write decisions and lessons to disk as they happen (`PLAN.md`, `docs/`, the rule files): a note kept "in mind" is gone when the session ends.
+- Read the project's `PROJECT.md`, the TODO and the most recent notes before acting.
+- Write decisions and lessons to disk as they happen (`docs/`, the rule files): a note kept "in mind" is gone when the session ends.
 - Long-term notes are the user's personal context: load them only in a direct session, never in shared or multi-party contexts.
 
 ## Permissions, commits and builds
 
 - When committing, one commit is one logical change: it reverts on its own, builds and tests pass at that commit, and its subject needs no "and". Split by intent, not by file or by session.
-- Messages follow Conventional Commits: `<type>(<scope>): <subject>`, one-line subject; type is one of `feat` / `fix` / `docs` / `style` / `refactor` / `perf` / `test` / `build` / `ci` / `chore` / `revert`; the body states the key points briefly — why the change and how it was verified, not a walk-through of the diff.
-- Messages are written in English, subject and body; Chinese stays in conversation and documents.
+- Messages follow Conventional Commits — `<type>(<scope>): <subject>`, the type from `feat` / `fix` / `docs` / `style` / `refactor` / `perf` / `test` / `build` / `ci` / `chore` / `revert` — written in English, subject and body; **the body states the key points briefly**.
 - **Pushes need approval**: push, PR and any rewrite of pushed history wait for an explicit go-ahead — per action, or once as a plan that lists them, which then covers that list and the subagents it spawns.
 - **Review and tidy before push**: walk the series with `git log` and `git diff <base>...HEAD`; squash or reword into logical commits, drop what does not belong, and rewrite history only before the push — never after it.
 - Branch naming and commit conventions follow the `conventional-branch` skill (Conventional Branch + Conventional Commits); see https://skills.sh/conventional-branch/conventional-branch/conventional-branch and defer to it when it changes.
@@ -97,7 +92,7 @@ Confirm environment and skills before starting; install what is missing and veri
 
 > "Programs must be written for people to read, and only incidentally for machines to execute." — Abelson & Sussman, *Structure and Interpretation of Computer Programs*
 
-- No compatibility during development: no legacy entry points, no dual writes, no "migration period" — write the current implementation.
+- No compatibility code: write the current implementation. The one exception is a change that cannot land in one step — it spans live data, or its blast radius reaches every call site — and it runs expand → migrate → contract, each step leaving the system working.
 - No defensive validation: validate and normalize once on entry, never re-check internally; do not repeat checks that the framework, standard library or upstream already guarantees (trimming, nil checks, signature verification); settle every required dependency in the constructor — a missing one is a construction error, not a degraded branch further down the code — and never use zero-value or empty-struct placeholders as fallbacks. Untrusted input at the boundary still must be validated with a clear error.
 - Against over-engineering: do not split a function that has a single caller; do not write pass-through wrappers; do not pre-build abstractions for imagined scenarios.
 - Reuse first: existing project wrapper > mature third-party library > official SDK > writing it yourself; never pull two dependencies for the same capability.
